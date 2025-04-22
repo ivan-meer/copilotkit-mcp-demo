@@ -174,9 +174,12 @@ export const TodoApp = () => {
     });
   
     return (
-      <div className="flex flex-col items-center justify-start h-full w-full max-w-2xl mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">Working Memory</h1>
-  
+      <div className="flex flex-col items-center justify-start h-full w-full max-w-2xl mx-auto">
+        <div className="w-full mb-4 text-left">
+          <h2 className="text-xl font-semibold">Focused Actions</h2>
+          <p className="text-sm text-gray-500">Immediate items to complete</p>
+        </div>
+        
         <div className="flex w-full mb-6">
           <input
             type="text"
@@ -203,11 +206,17 @@ export const TodoApp = () => {
                 key={index}
                 className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden"
               >
-                <div className="flex items-center justify-between p-4">
-                  <div className="flex items-center">
+                <div 
+                  className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50" 
+                  onClick={() => toggleAccordion(todo.id)}
+                >
+                  <div className="flex items-center flex-1 min-w-0">
                     <button
-                      onClick={() => toggleAccordion(todo.id)}
-                      className="mr-2 text-gray-500 hover:text-gray-700"
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        toggleAccordion(todo.id); 
+                      }}
+                      className="mr-2 text-gray-500 hover:text-gray-700 flex-shrink-0"
                     >
                       {todo.expanded ? (
                         <ChevronDown className="w-5 h-5" />
@@ -216,8 +225,11 @@ export const TodoApp = () => {
                       )}
                     </button>
                     <button
-                      onClick={() => toggleTodo(todo.id)}
-                      className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${todo.completed
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleTodo(todo.id);
+                      }}
+                      className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center flex-shrink-0 ${todo.completed
                         ? "bg-green-500 border-green-500"
                         : "border-gray-400"
                         }`}
@@ -225,18 +237,29 @@ export const TodoApp = () => {
                       {todo.completed && <Check className="w-4 h-4 text-white" />}
                     </button>
                     <span
-                      className={`${todo.completed ? "line-through text-gray-400" : "text-gray-800"
+                      className={`inline-block truncate ${todo.completed ? "line-through text-gray-400" : "text-gray-800"
                         }`}
+                      title={todo.text}
                     >
                       {todo.text}
                     </span>
                   </div>
-                  <button
-                    onClick={() => deleteTodo(todo.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center ml-4 flex-shrink-0">
+                    {todo.subtasks.length > 0 && (
+                      <span className="text-xs font-medium mr-2 px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                        {todo.subtasks.length}
+                      </span>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteTodo(todo.id);
+                      }}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
   
                 {todo.expanded && (
@@ -267,7 +290,10 @@ export const TodoApp = () => {
                           >
                             <div className="flex items-center">
                               <button
-                                onClick={() => toggleSubtask(todo.id, subtask.id)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleSubtask(todo.id, subtask.id);
+                                }}
                                 className={`w-5 h-5 rounded-full border-2 mr-2 flex items-center justify-center ${subtask.completed
                                   ? "bg-green-500 border-green-500"
                                   : "border-gray-400"
@@ -283,7 +309,10 @@ export const TodoApp = () => {
                               </span>
                             </div>
                             <button
-                              onClick={() => deleteSubtask(todo.id, subtask.id)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteSubtask(todo.id, subtask.id);
+                              }}
                               className="text-red-500 hover:text-red-700"
                             >
                               <Trash2 className="w-4 h-4" />

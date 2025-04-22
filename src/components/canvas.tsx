@@ -1,6 +1,5 @@
 "use client";
 
-
 import * as Skeletons from "@/components/skeletons";
 import { CircleOff, Loader2, Settings, Plus, Trash2, Check, ChevronDown, ChevronRight } from "lucide-react";
 import React, { Suspense, useState, useRef, ChangeEvent } from "react";
@@ -12,59 +11,48 @@ import { TodoApp } from "./Todo";
 import VisualRepresentation from "./VisualRepresentation";
 import Test from "./Test";
 
-
-
 export default function Canvas() {
   const [showMCPConfigModal, setShowMCPConfigModal] = useState(false);
 
-
-
-
   return (
-    <div style={{border:"1px solid red"}} className="relative h-full w-full grid grid-cols-1 md:grid-cols-12 p-5">
-
-      <div className="absolute top-4 right-4 flex gap-2 z-[9999]">
-        <button
-          onClick={() => setShowMCPConfigModal(true)}
-          className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
-        >
-          <Settings className="w-4 h-4" />
-          <span className="font-medium">MCP Servers</span>
-        </button>
-
-      </div>
-      <TodoProvider>
-
-        <div className="order-last md:order-first md:col-span-3 p-4 border-r h-screen overflow-y-auto">
+    <TodoProvider>
+      <div className="flex h-screen w-screen bg-gray-100">
+        <div className="w-96 flex-shrink-0 border-r border-gray-200 bg-white p-4 overflow-y-auto">
           <ChatWindow />
         </div>
 
-        <div className="order-first md:order-last md:col-span-5 bg-white p-8 overflow-y-auto">
-          <div className="space-y-8 h-full">
-            <Suspense fallback={<Skeletons.EmailListSkeleton />}>
-              <div className="h-full">
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-white flex-shrink-0">
+            <h1 className="text-2xl font-bold">Working Memory</h1>
+            <button
+              onClick={() => setShowMCPConfigModal(true)}
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2"
+            >
+              <Settings className="w-4 h-4" />
+              <span className="font-medium">MCP Servers</span>
+            </button>
+          </div>
+
+          <div className="flex-1 flex gap-5 p-5 overflow-hidden">
+            <div className="flex-[3] bg-white p-6 rounded-lg shadow border border-gray-200 overflow-y-auto">
+              <Suspense fallback={<Skeletons.EmailListSkeleton />}>
                 <VisualRepresentation />
-              </div>
-            </Suspense>
-          </div>
-        </div>
-        <div className="order-first md:order-last md:col-span-4 bg-white p-8 overflow-y-auto">
-          <div className="space-y-8 h-full">
-            <Suspense fallback={<Skeletons.EmailListSkeleton />}>
-              <div className="h-full">
+              </Suspense>
+            </div>
+
+            <div className="flex-[3] bg-white p-6 rounded-lg shadow border border-gray-200 overflow-y-auto">
+              <Suspense fallback={<Skeletons.EmailListSkeleton />}>
                 <TodoApp />
-              </div>
-            </Suspense>
+              </Suspense>
+            </div>
           </div>
         </div>
-      </TodoProvider>
 
-
-      {/* MCP Config Modal */}
-      <MCPConfigModal
-        isOpen={showMCPConfigModal}
-        onClose={() => setShowMCPConfigModal(false)}
-      />
-    </div>
+        <MCPConfigModal
+          isOpen={showMCPConfigModal}
+          onClose={() => setShowMCPConfigModal(false)}
+        />
+      </div>
+    </TodoProvider>
   );
 }
