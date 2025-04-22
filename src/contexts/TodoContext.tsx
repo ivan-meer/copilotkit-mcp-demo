@@ -40,8 +40,8 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     completed: false,
     subtasks: [{
       id: 1,
-      text: "Reasearch the best motorcycle",
-      completed: false
+      text: "Research the best motorcycle",
+      completed: true
     }, {
       id: 2,
       text: "Visit the dealership",
