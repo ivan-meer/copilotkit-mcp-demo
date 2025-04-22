@@ -1,4 +1,9 @@
-# Working Memory 
+<div align="center">
+
+# Working Memory
+   
+![CopilotKit-Banner](https://github.com/user-attachments/assets/8167c845-0381-45d9-ad1c-83f995d48290)
+</div>
 
 Working Memory is an example for the implementation of the MCP server-client integrations to handle and manage your projects and tasks from your project management applications like Linear.
 
