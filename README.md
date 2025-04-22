@@ -1,13 +1,11 @@
-# Open Multi-Agent Canvas
+# Working Memory 
 
-Open Multi-Agent Canvas is an open-source multi-agent chat interface that leverages specialized agents to assist with travel planning, research, email drafting, and more. Built with Next.js, React, and CopilotKit, this project offers an interactive, unified experience by managing multiple agents within one dynamic conversation.
+Working Memory is an example for the implementation of the MCP server-client integrations to handle and manage your projects and tasks from your project management applications like Linear.
 
 ## Key Features
 
-- **Multi-Agent Chat Interface:**  
-  Chat with a range of specialized agents:
-  - **Travel Agent:** Plan trips, create itineraries, and view travel recommendations on an interactive map powered by Leaflet.
-  - **Research Agent:** Conduct research with real-time logs and progress updates.
+- **CopilotKit AI Chat Interface:**  
+  Chat with the CopilotKit AI which acts as useful assitant who can able to provide answers to user queries and perform executable actions inside the application.
   
 - **Real-Time Interactivity:**  
   Enjoy a live chat powered by `@copilotkit/react-ui` that orchestrates dynamic state changes and agent responses.
@@ -23,34 +21,46 @@ Open Multi-Agent Canvas is an open-source multi-agent chat interface that levera
 - **Framework:** [Next.js](https://nextjs.org)
 - **UI Library:** React, [CopilotKit UI](https://www.npmjs.com/package/@copilotkit/react-ui)
 - **State Management:** [CopilotKit React Core](https://www.npmjs.com/package/@copilotkit/react-core)
-- **Mapping:** [Leaflet](https://leafletjs.com) with [React Leaflet](https://react-leaflet.js.org)
+
 - **Styling:** Tailwind CSS
+- **Additional Libraries:**
+  - React Query for data fetching
+  - Framer Motion for animations
+  - Radix UI for accessible components
+  - React Flow for flow diagrams
 
 ## Setup Instructions
 
 1. **Prerequisites:**  
    - [Node.js](https://nodejs.org) (LTS version recommended)
-   - npm or yarn
+   - npm, yarn, or pnpm
 
 2. **Installation:**  
    ```bash
    # Clone the repository
    git clone <repository-url>
    
-   # Navigate to the frontend directory
-   cd frontend
-
    # Install dependencies
    npm install
    # or
    yarn install
+   # or
+   pnpm install
    ```
 
-3. **Running the Development Server:**  
+3. **Environment Setup:**  
+   Create a `.env` file in the root directory with the necessary environment variables.
+   ```bash
+    OPENAI_API_KEY = YOUR_API_KEY
+   ```
+
+4. **Running the Development Server:**  
    ```bash
    npm run dev
    # or
    yarn dev
+   # or
+   pnpm dev
    ```
    Then, open [http://localhost:3000](http://localhost:3000) in your browser.
 
@@ -62,15 +72,37 @@ Open Multi-Agent Canvas is an open-source multi-agent chat interface that levera
 - **/src/components:**  
   Houses reusable components including agent interfaces (Travel, Research, Chat, Map, Sidebar) and UI elements.
 
-- **/providers:**  
+- **/src/providers:**  
   Wraps the global state providers responsible for managing agent states.
 
-- **/lib:**  
-  Contains utility functions and configuration files (like available agents configuration).
+- **/src/lib:**  
+  Contains utility functions and configuration files.
 
-## Value Proposition
+- **/src/hooks:**  
+  Custom React hooks for shared functionality.
 
-Open Multi-Agent Canvas simplifies complex tasks by unifying multiple specialized agents in a single, interactive chat interface. Whether you're planning a trip with an interactive map, conducting in-depth research with real-time logs, this application streamlines your workflow and provides focused assistance tailored to each task—all within one platform.
+- **/src/contexts:**  
+  React context providers for global state management.
+
+## Development
+
+- **Linting:**  
+  ```bash
+  npm run lint
+  # or
+  yarn lint
+  # or
+  pnpm lint
+  ```
+
+- **Building for Production:**  
+  ```bash
+  npm run build
+  # or
+  yarn build
+  # or
+  pnpm build
+  ```
 
 ## Deployment
 
