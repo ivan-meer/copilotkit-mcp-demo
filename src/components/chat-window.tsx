@@ -16,6 +16,7 @@ export const ChatWindow: FC = () => {
   return (
     <CopilotChat 
       className="h-full flex flex-col"
+      
       instructions={`Always use the MCP server to complete the task. You will be provided with a list of MCP servers. Use the appropriate MCP server to complete the task.
       To perform any actions over the todo task use the following data for manipulation ${JSON.stringify(todos)}`}
       labels={{

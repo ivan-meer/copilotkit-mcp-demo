@@ -23,7 +23,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [mcpConfig, _setMcpConfig] = useLocalStorage("mcpConfig",[]);
   const [config, setConfig] = React.useState<Config[]>(mcpConfig || []);
 
-  console.log("MCP",config);
+  // console.log("MCP",config);
 
   return (
     <ServerConfigsContext.Provider value={{config,setConfig}} >
@@ -32,7 +32,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           showDevConsole={true}
           // publicApiKey={process.env.NEXT_PUBLIC_COPILOT_CLOUD_API_KEY}
           runtimeUrl="/api/copilotkit"
-          mcpEndpoints={[{endpoint: "https://mcp.composio.dev/reddit/salmon-numerous-father-dsGb4Y"}]}
+          mcpEndpoints={config}
         >
           <CoAgentsProvider>{children}</CoAgentsProvider>
         </CopilotKit>

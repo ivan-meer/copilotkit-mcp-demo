@@ -5,6 +5,7 @@ export interface SubTask {
   id: number;
   text: string;
   completed: boolean;
+  parentId?: number;
 }
 
 export interface Todo {
@@ -33,7 +34,29 @@ const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 // Create a provider component
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([{
+    id: Date.now(),
+    text: "Buy a motorcycle",
+    completed: false,
+    subtasks: [{
+      id: 1,
+      text: "Reasearch the best motorcycle",
+      completed: false
+    }, {
+      id: 2,
+      text: "Visit the dealership",
+      completed: false
+    }, {
+      id: 3,
+      text: "Test ride the motorcycle",
+      completed: false
+    }, {
+      id: 4,
+      text: "Prepare the finance",
+      completed: false
+    }],
+    expanded: true
+  }]);
 
   const addTodo = (str: string | null = null) => {
     if (str === null) return null;
@@ -78,7 +101,9 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const toggleAccordion = (id: number) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, expanded: !todo.expanded } : todo
+        todo.id === id
+          ? { ...todo, expanded: !todo.expanded }
+          : { ...todo, expanded: false }
       )
     );
   };
@@ -93,7 +118,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             ...todo,
             subtasks: [
               ...todo.subtasks,
-              { id: Date.now()+Math.random(), text: subtask, completed: false }
+              { id: Date.now() + Math.random(), text: subtask, completed: false }
             ]
           };
         }
@@ -103,7 +128,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const addTaskAndSubtask = (title: string, subtask: string[]) => {
-    
+
     setTodos([
       ...todos,
       {
@@ -111,7 +136,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         text: title,
         completed: false,
         subtasks: subtask.map((subtask) => ({
-          id: Date.now()+Math.random(),
+          id: Date.now() + Math.random(),
           text: subtask,
           completed: false
         })),
@@ -121,7 +146,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const toggleSubtask = (parentId: number, subtaskId: number) => {
-    
+    debugger;
     setTodos(
       todos.map((todo) => {
         if (todo.id === parentId) {
@@ -131,11 +156,11 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               ? { ...subtask, completed: !subtask.completed }
               : subtask
           );
-          
+
           // Then check if all subtasks are completed
-          const allSubtasksCompleted = updatedSubtasks.length > 0 && 
+          const allSubtasksCompleted = updatedSubtasks.length > 0 &&
             updatedSubtasks.every(subtask => subtask.completed);
-          
+
           // Update the parent's completed status based on subtasks
           return {
             ...todo,
@@ -149,7 +174,7 @@ export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const deleteSubtask = (parentId: number, subtaskId: number) => {
-    
+
     setTodos(
       todos.map((todo) => {
         if (todo.id === parentId) {

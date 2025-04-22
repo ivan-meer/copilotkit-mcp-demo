@@ -14,7 +14,6 @@ import {
     createMCPClient: async (config) => {
         console.log(config,"config.endpointconfig.endpointconfig.endpointconfig.endpoint");
       return await experimental_createMCPClient({
-        
         transport: {
           type: "sse",
           url: config.endpoint,
