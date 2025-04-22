@@ -283,7 +283,7 @@ export const TodoApp = () => {
   
                     {todo.subtasks.length > 0 ? (
                       <div className="space-y-2">
-                        {todo.subtasks.map((subtask,index) => (
+                        {todo.subtasks.map((subtask) => (
                           <div
                             key={subtask.id+Math.random()}
                             className="flex items-center justify-between p-2 bg-white rounded border border-gray-200"

@@ -10,7 +10,7 @@ import {
   const serviceAdapter = new OpenAIAdapter();
    
   const runtime = new CopilotRuntime({
-    // @ts-ignore
+    // @ts-expect-error
     createMCPClient: async (config) => {
         console.log(config,"config.endpointconfig.endpointconfig.endpointconfig.endpoint");
       return await experimental_createMCPClient({

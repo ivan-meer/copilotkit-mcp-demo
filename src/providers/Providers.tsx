@@ -20,7 +20,7 @@ export interface ConfigContextType {
 const queryClient = new QueryClient();
 export const ServerConfigsContext = React.createContext<ConfigContextType | undefined>(undefined);
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [mcpConfig, _setMcpConfig] = useLocalStorage("mcpConfig",[]);
+  const [mcpConfig] = useLocalStorage("mcpConfig",[]);
   const [config, setConfig] = React.useState<Config[]>(mcpConfig || []);
 
   // console.log("MCP",config);

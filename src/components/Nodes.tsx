@@ -1,9 +1,7 @@
 import { SubTask, Todo } from "@/contexts/TodoContext";
 import "../app/globals.css";
 import { Handle, Position } from "reactflow";
-import DoneIcon from '@mui/icons-material/Done';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
-import TaskIcon from '@mui/icons-material/Task';
 const ParentNode = ({ data }: { data: Todo }) => {
     console.log(data, "data from parent");
     return (

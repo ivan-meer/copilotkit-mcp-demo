@@ -1,17 +1,10 @@
 "use client";
-import { useCoAgent } from "@copilotkit/react-core";
-import { createContext, useContext, useRef } from "react";
 // import { AvailableAgents } from "@/lib/available-agents";
-import { MCPAgentState } from "./agents/mcp-agent";
-import { MCP_STORAGE_KEY, ServerConfig } from "@/lib/mcp-config-types";
-import { useLocalStorage } from "@/hooks/use-local-storage";
 
 /**
  * Base Agent State
  */
-export type BaseAgentState = {
-  // __name__: AvailableAgents;
-};
+
 
 /**
  * Travel Agent Types
@@ -40,11 +33,6 @@ export type SearchProgress = {
   done: boolean;
 };
 
-export type TravelAgentState = BaseAgentState & {
-  trips: Trip[];
-  selected_trip_id: string | null;
-  search_progress?: SearchProgress[];
-};
 
 /**
  * Research Agent Types
@@ -71,10 +59,6 @@ export interface Log {
   done: boolean;
 }
 
-export const AgentsContext = createContext<
-  Array<TravelAgentState | MCPAgentState>
->([]);
-
 /**
  * This provider wraps state from all agents
  */
@@ -87,19 +71,9 @@ export const CoAgentsProvider = ({
 
 
   return (
-    <AgentsContext.Provider
-      value={[
-      ]}
-    >
+    <>
       {children}
-    </AgentsContext.Provider>
+    </>
   );
 };
 
-export const useCoAgents = () => {
-  const context = useContext(AgentsContext);
-  if (!context) {
-    throw new Error("useAgents must be used within an AgentsProvider");
-  }
-  return context;
-};

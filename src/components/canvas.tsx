@@ -1,15 +1,13 @@
 "use client";
 
 import * as Skeletons from "@/components/skeletons";
-import { CircleOff, Loader2, Settings, Plus, Trash2, Check, ChevronDown, ChevronRight } from "lucide-react";
-import React, { Suspense, useState, useRef, ChangeEvent } from "react";
+import {  Settings } from "lucide-react";
+import React, { Suspense, useState } from "react";
 import { ChatWindow } from "./chat-window";
 import { MCPConfigModal } from "./mcp-config-modal";
-import { useCopilotAction, useCopilotReadable } from "@copilotkit/react-core";
-import { useTodo, TodoProvider } from "@/contexts/TodoContext";
+import { TodoProvider } from "@/contexts/TodoContext";
 import { TodoApp } from "./Todo";
 import VisualRepresentation from "./VisualRepresentation";
-import Test from "./Test";
 
 export default function Canvas() {
   const [showMCPConfigModal, setShowMCPConfigModal] = useState(false);

@@ -1,6 +1,6 @@
 "use client";
 import { useTodo } from "@/contexts/TodoContext";
-import { CopilotChat, CopilotSidebar } from "@copilotkit/react-ui";
+import { CopilotChat } from "@copilotkit/react-ui";
 import "@copilotkit/react-ui/styles.css";
 import {
   ActivityIcon,

@@ -1,7 +1,5 @@
-import { Todo, useTodo } from '@/contexts/TodoContext';
-import { randomUUID } from 'crypto';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import DoneIcon from '@mui/icons-material/Done';
+import { useTodo } from '@/contexts/TodoContext';
+import React, { useEffect, useMemo } from 'react';
 import "../app/globals.css";
 
 import {
@@ -9,7 +7,6 @@ import {
     ReactFlow,
     useNodesState,
     useEdgesState,
-    addEdge,
     useReactFlow,
     ReactFlowProvider,
     Edge,
@@ -25,18 +22,18 @@ const VisualRepresentation = () => {
     // const reactFlowWrapper = useRef(null);
 
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges, _onEdgesChange] = useEdgesState([]);
+    const [edges, setEdges] = useEdgesState([]);
     const { fitView } = useReactFlow();
 
     // This effect calculates nodes/edges based on todos
     useEffect(() => {
         console.log("Calculating nodes/edges based on todos:", todos);
-        let units: Node[] = todos.flatMap((item, index) => {
+        const units: Node[] = todos.flatMap((item) => {
             if (!item.expanded && todos.length != 1) return [];
-            let arr: Node[] = [{
+            const arr: Node[] = [{
                 id: item.id.toString(),
                 data: item,
-                position: { x: nodes.find((node) => node.id.toString() === item.id.toString())?.position.x || index * 100, y: nodes.find((node) => node.id.toString() === item.id.toString())?.position.y || index * 100 },
+                position: { x: nodes.find((node) => node.id.toString() === item.id.toString())?.position.x || 0 * 100, y: nodes.find((node) => node.id.toString() === item.id.toString())?.position.y || 0 * 100 },
                 type: "ParentNode",               
             }]
             if (item.subtasks.length > 0) {
@@ -55,7 +52,7 @@ const VisualRepresentation = () => {
             return [...arr];
         });
         setNodes(units);
-        let edges: Edge[] = todos.flatMap((item, _index) => {
+        const edges: Edge[] = todos.flatMap((item) => {
             if (!item.expanded && todos.length != 1) return [];
             if (item.subtasks.length > 0) {
                 let arr = [];
@@ -73,7 +70,7 @@ const VisualRepresentation = () => {
             return [];
         })
         setEdges(edges);
-    }, [todos, setNodes, setEdges]);
+    }, [todos]);
 
     // This separate effect calls fitView when nodes change
     useEffect(() => {
