@@ -52,9 +52,9 @@ export const TodoApp = () => {
       description: "Adds a subtask to the todo list",
       parameters: [
         {
-          name: "index",
+          name: "id",
           type: "number",
-          description: "The position of the parent task in the todo list",
+          description: "The id of the parent task in the todo list",
           required: true,
         },
         {
@@ -64,8 +64,9 @@ export const TodoApp = () => {
           required: true,
         },
       ],
-      handler: ({ index, subtask }) => {
-        addSubtask(index, subtask);
+      handler: ({ id, subtask }) => {
+        debugger
+        addSubtask(id, subtask);
       }
     });
   

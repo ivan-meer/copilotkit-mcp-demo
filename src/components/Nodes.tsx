@@ -3,7 +3,7 @@ import "../app/globals.css";
 import { Handle, Position } from "reactflow";
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 const ParentNode = ({ data }: { data: Todo }) => {
-    console.log(data, "data from parent");
+    // console.log(data, "data from parent");
     return (
         <div style={{
             border: "1px solid lightgray",
@@ -42,7 +42,7 @@ const ParentNode = ({ data }: { data: Todo }) => {
 };
 
 const ChildNode = ({ data }: { data: SubTask }) => {
-    console.log(data, "data from child");
+    // console.log(data, "data from child");
     return (
         <div style={{
             border: "1px solid lightgray",
