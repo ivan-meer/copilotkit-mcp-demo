@@ -15,6 +15,9 @@ const eslintConfig = [
     extends: ['next'],
     rules: {
       'react/no-unescaped-entities': 'off',
+      'react/no-unknown-property': 'off',
+      'react/no-unused-vars': 'off',
+      
       '@next/next/no-page-custom-font': 'off',
     },
   }),
