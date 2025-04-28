@@ -38,7 +38,8 @@ export default function MCPToolCall({
       console.log(result, "MCPToolCall Result");
       if (result && result.error) {
         const errorMessage = JSON.stringify(result.error);
-        window.alert(`Tool Call Error (${name || 'Unknown Tool'}):\n${errorMessage}`);
+        // window.alert(`Tool Call Error (${name || 'Unknown Tool'}):\n${errorMessage}`);
+        console.log(errorMessage, "MCPToolCall Error");
         return (
           <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
