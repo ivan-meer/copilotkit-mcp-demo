@@ -41,7 +41,7 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   const [savedConfigs, setSavedConfigs] = useLocalStorage<
     Record<string, ServerConfig>
   >(MCP_STORAGE_KEY, {});
-  console.log(savedConfigs, "savedConfigs");
+  // console.log(savedConfigs, "savedConfigs");
   // Set the ref value once we have the saved configs
   useEffect(() => {
     if (Object.keys(savedConfigs).length > 0) {
