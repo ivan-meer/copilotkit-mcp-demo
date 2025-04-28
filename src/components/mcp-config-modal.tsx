@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useContext } from "react";
-import { useCoAgent } from "@copilotkit/react-core";
+import { useCoAgent, useCopilotChat } from "@copilotkit/react-core";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { ConnectionType, ServerConfig, MCP_STORAGE_KEY } from "@/lib/mcp-config-types";
 import { X, Plus, Server, Globe, Trash2 } from "lucide-react";
@@ -64,6 +64,12 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   const totalServers = configs.length;
   const stdioServers = 0
   const sseServers = configs.length
+
+  const { setMcpServers  } = useCopilotChat();
+  useEffect(()=>{
+    setMcpServers(configs);
+  },[setMcpServers])
+
 
   // Set loading to false when state is loaded
   useEffect(() => {

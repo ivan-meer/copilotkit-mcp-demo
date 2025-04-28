@@ -1,13 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { CopilotKit } from "@copilotkit/react-core";
+import { CopilotKit, useCopilotChat } from "@copilotkit/react-core";
 import { CoAgentsProvider } from "@/components/coagents-provider";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import McpServerManager from "@/components/McpServerManager";
 
-interface Config {
+export interface Config {
   endpoint: string;
   serverName: string;
 }
@@ -23,7 +24,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [mcpConfig] = useLocalStorage("mcpConfig",[]);
   const [config, setConfig] = React.useState<Config[]>(mcpConfig || []);
 
-  // console.log("MCP",config);
 
   return (
     <ServerConfigsContext.Provider value={{config,setConfig}} >
@@ -32,8 +32,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           showDevConsole={true}
           // publicApiKey={process.env.NEXT_PUBLIC_COPILOT_CLOUD_API_KEY}
           runtimeUrl="/api/copilotkit"
-          mcpEndpoints={config}
         >
+          <McpServerManager configs={config} />
           <CoAgentsProvider>{children}</CoAgentsProvider>
         </CopilotKit>
         <ReactQueryDevtools initialIsOpen={false} />
