@@ -1,36 +1,41 @@
 import {
-    CopilotRuntime,
-    OpenAIAdapter,
-    copilotRuntimeNextJSAppRouterEndpoint,
-  } from "@copilotkit/runtime";
-  import { experimental_createMCPClient } from "ai";
-   
-  import { NextRequest } from "next/server";
-   
-  const serviceAdapter = new OpenAIAdapter();
-   
-  const runtime = new CopilotRuntime({
-    // @ts-expect-error
-    createMCPClient: async (config) => {
-        console.log(config,"config.endpointconfig.endpointconfig.endpointconfig.endpoint");
-      return await experimental_createMCPClient({
-        transport: {
-          type: "sse",
-          url: config.endpoint,
-          headers: config.apiKey
-            ? { Authorization: `Bearer ${config.apiKey}` }
-            : undefined,
-        },
+  CopilotRuntime,
+  OpenAIAdapter,
+  copilotRuntimeNextJSAppRouterEndpoint,
+} from "@copilotkit/runtime";
+import { NextRequest } from "next/server";
+import { McpClient } from "../../../lib/mcp-client";
+
+const serviceAdapter = new OpenAIAdapter();
+const runtime = new CopilotRuntime({
+  // @ts-ignore
+  createMCPClient: async (config) => {
+    try {
+      const mcpClient = new McpClient({
+        serverUrl: config.endpoint,
       });
-    },
-  });
-   
-  export const POST = async (req: NextRequest) => {
+      await mcpClient.connect();
+      return mcpClient;
+    } catch (error) {
+      console.error(`Error creating MCP client for ${config.endpoint}:`, error);
+    }
+  },
+});
+
+export const POST = async (req: NextRequest) => {
+  try {
     const { handleRequest } = copilotRuntimeNextJSAppRouterEndpoint({
       runtime,
       serviceAdapter,
       endpoint: "/api/copilotkit",
     });
-   
+
     return handleRequest(req);
-  };
+  } catch (error) {
+    console.error("Error handling CopilotKit request:", error);
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+};

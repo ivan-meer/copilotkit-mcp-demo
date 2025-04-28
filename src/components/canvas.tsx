@@ -1,17 +1,26 @@
 "use client";
 
 import * as Skeletons from "@/components/skeletons";
-import {  Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import React, { Suspense, useState } from "react";
 import { ChatWindow } from "./chat-window";
 import { MCPConfigModal } from "./mcp-config-modal";
 import { TodoProvider } from "@/contexts/TodoContext";
 import { TodoApp } from "./Todo";
 import VisualRepresentation from "./VisualRepresentation";
+import { useCopilotChatSuggestions } from "@copilotkit/react-ui";
 
 export default function Canvas() {
   const [showMCPConfigModal, setShowMCPConfigModal] = useState(false);
-
+  useCopilotChatSuggestions(
+    {
+      instructions:
+        "Check Asana and Typefully connections. If Asana is connected, suggest a relevant task to create (e.g. 'Review Q2 project milestones'). If Typefully is connected, suggest a draft tweet (e.g. 'Share latest product update').",
+      minSuggestions: 1,
+      maxSuggestions: 4,
+    },
+    []
+  );
   return (
     <TodoProvider>
       <div className="flex h-screen w-screen bg-gray-100">
