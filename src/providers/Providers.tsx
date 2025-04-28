@@ -7,6 +7,7 @@ import { CopilotKit, useCopilotChat } from "@copilotkit/react-core";
 import { CoAgentsProvider } from "@/components/coagents-provider";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import McpServerManager from "@/components/McpServerManager";
+import { ToolRenderer } from "@/components/ToolRenderer";
 
 export interface Config {
   endpoint: string;
@@ -21,12 +22,12 @@ export interface ConfigContextType {
 const queryClient = new QueryClient();
 export const ServerConfigsContext = React.createContext<ConfigContextType | undefined>(undefined);
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [mcpConfig] = useLocalStorage("mcpConfig",[]);
+  const [mcpConfig] = useLocalStorage("mcpConfig", []);
   const [config, setConfig] = React.useState<Config[]>(mcpConfig || []);
 
 
   return (
-    <ServerConfigsContext.Provider value={{config,setConfig}} >
+    <ServerConfigsContext.Provider value={{ config, setConfig }} >
       <QueryClientProvider client={queryClient}>
         <CopilotKit
           showDevConsole={true}
@@ -34,6 +35,8 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           runtimeUrl="/api/copilotkit"
         >
           <McpServerManager configs={config} />
+          <ToolRenderer />
+          {/* <MCPToolCall /> */}
           <CoAgentsProvider>{children}</CoAgentsProvider>
         </CopilotKit>
         <ReactQueryDevtools initialIsOpen={false} />

@@ -32,7 +32,7 @@ export const TodoApp = () => {
     };
   
     useCopilotAction({
-      name: "addTask",
+      name: "ADD_TASK",
       description: "Adds a task to the todo list",
       parameters: [
         {
@@ -48,7 +48,7 @@ export const TodoApp = () => {
     });
   
     useCopilotAction({
-      name: "addSubtask",
+      name: "ADD_SUBTASK",
       description: "Adds a subtask to the todo list",
       parameters: [
         {
@@ -77,7 +77,7 @@ export const TodoApp = () => {
     })
   
     useCopilotAction({
-      name: "addTaskAndSubtask",
+      name: "ADD_TASK_AND_SUBTASK",
       description: "Adds a task and its subtask to the todo list",
       parameters: [
         {
@@ -99,7 +99,7 @@ export const TodoApp = () => {
     });
   
     useCopilotAction({
-      name: "deleteTodo",
+      name: "DELETE_TASK",
       description: "Deletes a parent todo item from the todo list",
       parameters: [
         {
@@ -115,7 +115,7 @@ export const TodoApp = () => {
     });
   
     useCopilotAction({
-      name: "deleteSubTodo",
+      name: "DELETE_SUBTASK",
       description: "Deletes a subtask from the todo list",
       parameters: [
         {
@@ -137,7 +137,7 @@ export const TodoApp = () => {
     });
   
     useCopilotAction({
-      name: "completeTodo",
+      name: "COMPLETE_TASK",
       description: "Completes a parent todo item from the todo list",
       parameters: [
         {
@@ -153,7 +153,7 @@ export const TodoApp = () => {
     });
   
     useCopilotAction({
-      name: "completeSubtask",
+      name: "COMPLETE_SUBTASK",
       description: "Completes a subtask from the todo list",
       parameters: [
         {

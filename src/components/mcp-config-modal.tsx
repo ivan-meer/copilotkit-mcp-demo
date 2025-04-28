@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useContext } from "react";
 import { useCoAgent, useCopilotChat } from "@copilotkit/react-core";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { ConnectionType, ServerConfig, MCP_STORAGE_KEY } from "@/lib/mcp-config-types";
+import { ConnectionType, ServerConfig, MCP_STORAGE_KEY, MCPConfig } from "@/lib/mcp-config-types";
 import { X, Plus, Server, Globe, Trash2 } from "lucide-react";
 import { ServerConfigsContext } from "@/providers/Providers";
 // External link icon component
@@ -36,7 +36,7 @@ interface Config {
 export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   // Use ref to avoid re-rendering issues
   const configsRef = useRef<Record<string, ServerConfig>>({});
-  
+
   // Use localStorage hook for persistent storage
   const [savedConfigs, setSavedConfigs] = useLocalStorage<
     Record<string, ServerConfig>
@@ -51,7 +51,7 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
 
   const con = useContext(ServerConfigsContext);
   const [configs, setConfigs] = useState<Config[]>(con?.config || []);
-  const [mcpConfig, setMcpConfig] = useLocalStorage<any>("mcpConfig",[]);
+  const [mcpConfig, setMcpConfig] = useLocalStorage<any>("mcpConfig", []);
   const [serverName, setServerName] = useState("");
   const [connectionType, setConnectionType] = useState<ConnectionType>("sse");
   const [command, setCommand] = useState("");
@@ -65,16 +65,14 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   const stdioServers = 0
   const sseServers = configs.length
 
-  const { setMcpServers  } = useCopilotChat();
-  useEffect(()=>{
-    setMcpServers(configs);
-  },[setMcpServers])
+  const { setMcpServers } = useCopilotChat();
+
 
 
   // Set loading to false when state is loaded
   useEffect(() => {
     setIsLoading(false);
-    return ()=>{
+    return () => {
       setMcpConfig(configs);
     }
   }, []);
@@ -95,6 +93,10 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
       endpoint: url,
       serverName: serverName,
     }]);
+    setMcpServers([...configs, {
+      endpoint: url,
+      serverName: serverName,
+    }]);
 
     // Reset form
     setServerName("");
@@ -105,7 +107,9 @@ export function MCPConfigModal({ isOpen, onClose }: MCPConfigModalProps) {
   };
 
   const removeConfig = (index: number) => {
-    setConfigs((prev)=>{return prev.filter((item, i)=>i != index)});
+    setConfigs((prev) => { return prev.filter((_item, i) => i != index) });
+    con?.setConfig(con?.config.filter((_item, i: number) => i != index));
+    setMcpConfig(mcpConfig.filter((_item: Config[], i: number) => i != index));
   };
 
   if (!isOpen) return null;
