@@ -31,7 +31,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     <ServerConfigsContext.Provider value={{ config, setConfig }}>
       <QueryClientProvider client={queryClient}>
         <CopilotKit
-          showDevConsole={true}
           publicApiKey={process.env.NEXT_PUBLIC_COPILOT_CLOUD_API_KEY}
         >
           <McpServerManager configs={config} />
