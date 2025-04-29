@@ -15,7 +15,7 @@ export default function Canvas() {
   useCopilotChatSuggestions(
     {
       instructions:
-        "Check Asana and Typefully connections. If Asana is connected, first get workspace projects and ID details, then suggest creating a task with a creative title. If Typefully is connected, suggest a draft tweet with the Asana tasks an individual Tweet in Typefully.",
+        "Check Asana and Typefully connections. If Asana is connected, first get the workspace projects and ID details, then read them back to me. Then, suggest creating a ticket in Asana with each task as a bullet point. If Typefully is connected, suggest a draft tweet with the Asana tasks an individual Tweet in Typefully.",
       minSuggestions: 1,
       maxSuggestions: 2,
     },
