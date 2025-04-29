@@ -36,23 +36,23 @@ const TodoContext = createContext<TodoContextType | undefined>(undefined);
 export const TodoProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([{
     id: Date.now(),
-    text: "Marketing Plan",
+    text: "Blog Posts",
     completed: false,
     subtasks: [{
       id: 1,
-      text: "Define Target Audience",
+      text: "Agents 101: Build an Agent in 30 Minutes",
       completed: true
     }, {
       id: 2,
-      text: "Set SMART Marketing Goals",
+      text: "Simple Stack for Powerful Agents",
       completed: false
     }, {
       id: 3,
-      text: "Choose Marketing Channels",
+      text: "How I Built a Helpful Agent",
       completed: false
     }, {
       id: 4,
-      text: "Create a Content Calendar",
+      text: "What I Learned Building Agents",
       completed: false
     }],
     expanded: true
