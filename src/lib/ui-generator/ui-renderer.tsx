@@ -101,7 +101,7 @@ const defaultComponentLibrary: ComponentLibrary = {
       type: UIComponentType.NUMBER_INPUT,
       component: ({ config, value, onChange }: any) => (
         <input
-          type=\"number\"
+          type="number"
           value={value || ''}
           onChange={(e) => onChange?.(parseFloat(e.target.value) || 0)}
           placeholder={config.placeholder}
@@ -121,7 +121,7 @@ const defaultComponentLibrary: ComponentLibrary = {
       component: ({ config, value, onChange }: any) => (
         <label className={`form-checkbox ${config.className || ''}`} style={config.style}>
           <input
-            type=\"checkbox\"
+            type="checkbox"
             checked={Boolean(value)}
             onChange={(e) => onChange?.(e.target.checked)}
             disabled={config.disabled}
@@ -142,7 +142,7 @@ const defaultComponentLibrary: ComponentLibrary = {
           className={`form-select ${config.className || ''}`}
           style={config.style}
         >
-          {!config.required && <option value=\"\">-- Select --</option>}
+          {!config.required && <option value="">-- Select --</option>}
           {config.selectProps?.options?.map((option: any, index: number) => (
             <option key={index} value={option.value} disabled={option.disabled}>
               {option.label}
@@ -163,7 +163,7 @@ const defaultComponentLibrary: ComponentLibrary = {
           style={config.style}
         >
           {config.buttonProps?.icon && (
-            <span className=\"btn-icon\">{config.buttonProps.icon}</span>
+            <span className="btn-icon">{config.buttonProps.icon}</span>
           )}
           {config.label}
         </button>
@@ -205,7 +205,7 @@ const defaultComponentLibrary: ComponentLibrary = {
           }}
         >
           {config.label && (
-            <h3 className=\"card-title\">{config.label}</h3>
+            <h3 className="card-title">{config.label}</h3>
           )}
           {children}
         </div>
@@ -398,7 +398,7 @@ export const UIRenderer: React.FC<UIRendererProps> = ({
           {submitResult && (
             <div className={`submit-result ${submitResult.success ? 'success' : 'error'}`}>
               {submitResult.success ? (
-                <div className=\"success-message\">
+                <div className="success-message">
                   ✅ Submitted successfully!
                   {submitResult.data && (
                     <ComponentRenderer
@@ -412,10 +412,10 @@ export const UIRenderer: React.FC<UIRendererProps> = ({
                   )}
                 </div>
               ) : (
-                <div className=\"error-message\">
+                <div className="error-message">
                   ❌ Submission failed:
                   {submitResult.errors?.map((error, index) => (
-                    <div key={index} className=\"error-item\">
+                    <div key={index} className="error-item">
                       {error.field !== 'general' && <strong>{error.field}:</strong>} {error.message}
                     </div>
                   ))}
@@ -471,9 +471,9 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       return (
         <div className={`field field-${fieldConfig.type}`}>
           {fieldConfig.label && (
-            <label htmlFor={fieldConfig.id} className=\"field-label\">
+            <label htmlFor={fieldConfig.id} className="field-label">
               {fieldConfig.label}
-              {fieldConfig.required && <span className=\"required\">*</span>}
+              {fieldConfig.required && <span className="required">*</span>}
             </label>
           )}
           
@@ -488,15 +488,15 @@ const ComponentRenderer: React.FC<ComponentRendererProps> = ({
           />
           
           {fieldConfig.description && (
-            <div className=\"field-description\">{fieldConfig.description}</div>
+            <div className="field-description">{fieldConfig.description}</div>
           )}
           
           {fieldConfig.helpText && (
-            <div className=\"field-help\">{fieldConfig.helpText}</div>
+            <div className="field-help">{fieldConfig.helpText}</div>
           )}
           
           {form?.formState?.errors?.[fieldConfig.name] && (
-            <div className=\"field-error\">
+            <div className="field-error">
               {form.formState.errors[fieldConfig.name]?.message}
             </div>
           )}

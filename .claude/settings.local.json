@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:docs.copilotkit.ai)"
+      "WebFetch(domain:docs.copilotkit.ai)",
+      "Bash(npm run type-check:*)",
+      "Bash(chmod:*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout:*)"
     ],
     "deny": []
   }

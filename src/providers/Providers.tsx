@@ -5,6 +5,8 @@ import McpServerManager from "@/components/McpServerManager";
 import { ToolRenderer } from "@/components/ToolRenderer";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { CopilotKit } from "@copilotkit/react-core";
+// Remove or comment out unused import since module is not found
+// import { CopilotSidebar } from "@copilotkit/react-ui";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React from "react";
@@ -32,6 +34,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <CopilotKit
           publicApiKey={process.env.NEXT_PUBLIC_COPILOT_CLOUD_API_KEY}
+          runtimeUrl="/api/copilotkit"
         >
           <McpServerManager configs={config} />
           <ToolRenderer />

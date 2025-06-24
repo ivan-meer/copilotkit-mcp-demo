@@ -28,7 +28,7 @@ export default function MCPToolCall({
     return text
       .replace(/\\n/g, "\n")
       .replace(/\\t/g, "\t")
-      .replace(/\\"/g, '"')
+      .replace(/\"/g, '"')
       .replace(/\\\\/g, "\\");
   };
 

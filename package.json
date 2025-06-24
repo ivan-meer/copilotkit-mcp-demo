@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@copilotkit/react-core": "1.8.9",
-    "@copilotkit/react-ui": "1.8.9",
+    "@copilotkit/react-ui": "^0.2.0",
     "@copilotkit/runtime": "^1.8.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -58,31 +58,31 @@
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "lucide-react": "^0.474.0",
-    "next": "15.1.6",
+    "next": "^15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.48.2",
     "react-leaflet": "^5.0.0",
     "react-markdown": "^9.0.3",
     "reactflow": "^11.11.4",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.22.4",
-    "react-hook-form": "^7.48.2"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "cursor-tools": "latest",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
+    "nodemon": "^3.0.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
-    "cross-env": "^7.0.3",
-    "concurrently": "^8.2.2",
-    "nodemon": "^3.0.2",
-    "watch": "^1.0.2"
+    "watch": "^0.13.0"
   }
 }

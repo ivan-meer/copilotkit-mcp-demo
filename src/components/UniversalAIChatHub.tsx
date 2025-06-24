@@ -521,7 +521,7 @@ export const UniversalAIChatHub: React.FC<{
     }
     
     return (
-      <div className=\"universal-ai-schema-display\">
+      <div className="universal-ai-schema-display">
         <h3>Dynamic Tool Interface: {hubState.activeSchema.title}</h3>
         <UIRenderer
           schema={hubState.activeSchema}
@@ -547,28 +547,28 @@ export const UniversalAIChatHub: React.FC<{
   };
   
   return (
-    <div className=\"universal-ai-chat-hub\" data-initialized={hubState.initialized}>
+    <div className="universal-ai-chat-hub" data-initialized={hubState.initialized}>
       {/* Status indicator */}
-      <div className=\"hub-status\">
+      <div className="hub-status">
         <div className={`status-indicator ${hubState.initialized ? 'connected' : 'initializing'}`}>
-          <span className=\"status-dot\"></span>
+          <span className="status-dot"></span>
           Universal AI Hub: {hubState.initialized ? 'Ready' : 'Initializing...'}
         </div>
         
         {/* Quick stats */}
-        <div className=\"hub-stats\">
+        <div className="hub-stats">
           <span>AI Providers: {hubState.availableProviders.length}</span>
           <span>MCP Servers: {hubState.connectedServers.length}/{config.mcpServers.length}</span>
           <span>Tools: {hubState.availableTools.length}</span>
           {hubState.executingTools.size > 0 && (
-            <span className=\"executing\">Executing: {hubState.executingTools.size}</span>
+            <span className="executing">Executing: {hubState.executingTools.size}</span>
           )}
         </div>
       </div>
       
       {/* Error display */}
       {hubState.errors.length > 0 && (
-        <div className=\"hub-errors\">
+        <div className="hub-errors">
           <h4>⚠️ Initialization Warnings:</h4>
           <ul>
             {hubState.errors.map((error, index) => (
@@ -583,13 +583,13 @@ export const UniversalAIChatHub: React.FC<{
       
       {/* Executing tools display */}
       {hubState.executingTools.size > 0 && (
-        <div className=\"executing-tools\">
+        <div className="executing-tools">
           <h4>🔄 Executing Tools:</h4>
           {Array.from(hubState.executingTools.values()).map(context => (
-            <div key={context.id} className=\"executing-tool\">
+            <div key={context.id} className="executing-tool">
               <strong>{context.toolName}</strong> on {context.serverId}
               {context.progress && (
-                <div className=\"progress\">
+                <div className="progress">
                   {context.progress.current}/{context.progress.total} - {context.progress.message}
                 </div>
               )}

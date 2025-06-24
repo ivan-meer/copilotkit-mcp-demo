@@ -1,7 +1,7 @@
 "use client";
 
 import { useCoAgent, useCopilotAction } from "@copilotkit/react-core";
-import { CopilotKitCSSProperties, CopilotSidebar } from "@copilotkit/react-ui";
+// import { CopilotKitCSSProperties, CopilotSidebar } from "@copilotkit/react-ui";
 import { useState } from "react";
 
 export default function CopilotKitPage() {
@@ -21,16 +21,23 @@ export default function CopilotKitPage() {
   });
 
   return (
-    <main style={{ "--copilot-kit-primary-color": themeColor } as CopilotKitCSSProperties}>
+    <main style={{ "--copilot-kit-primary-color": themeColor } as React.CSSProperties}>
       <YourMainContent themeColor={themeColor} />
-      <CopilotSidebar
-        clickOutsideToClose={false}
-        defaultOpen={true}
-        labels={{
-          title: "Popup Assistant",
-          initial: "👋 Hi, there! You're chatting with an agent. This agent comes with a few tools to get you started.\n\nFor example you can try:\n- **Frontend Tools**: \"Set the theme to orange\"\n- **Shared State**: \"Write a proverb about AI\"\n- **Generative UI**: \"Get the weather in SF\"\n\nAs you interact with the agent, you'll see the UI update in real-time to reflect the agent's **state**, **tool calls**, and **progress**."
-        }}
-      />
+      <div className="p-4 bg-gray-100 rounded">
+        <h2 className="text-xl font-bold mb-2">CopilotKit Interface</h2>
+        <p className="text-gray-600">
+          👋 Hi, there! This is a placeholder for CopilotKit components.
+          The actual CopilotSidebar component is temporarily disabled due to version compatibility issues.
+        </p>
+        <div className="mt-4">
+          <p><strong>Available features:</strong></p>
+          <ul className="list-disc list-inside mt-2">
+            <li>Frontend Tools: Theme customization</li>
+            <li>Shared State: AI interactions</li>
+            <li>Generative UI: Dynamic components</li>
+          </ul>
+        </div>
+      </div>
     </main>
   );
 }

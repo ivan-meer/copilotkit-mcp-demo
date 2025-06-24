@@ -8,19 +8,21 @@ import { MCPConfigModal } from "./mcp-config-modal";
 import { TodoProvider } from "@/contexts/TodoContext";
 import { TodoApp } from "./Todo";
 import VisualRepresentation from "./VisualRepresentation";
-import { useCopilotChatSuggestions } from "@copilotkit/react-ui";
+// import { useCopilotChatSuggestions } from "@copilotkit/react-core";
 
 export default function Canvas() {
   const [showMCPConfigModal, setShowMCPConfigModal] = useState(false);
-  useCopilotChatSuggestions(
-    {
-      instructions:
-        "Check the Asana workspace. Make sure it's the parent workspace. If Asana is connected, first get the workspace projects and ID details, then read them back to me. Then, suggest creating a ticket in Asana with each task as a bullet point. If Typefully is connected, suggest a draft tweet with the Asana tasks an individual Tweet in Typefully.",
-      minSuggestions: 1,
-      maxSuggestions: 2,
-    },
-    []
-  );
+  
+  // TODO: Fix CopilotKit version compatibility
+  // useCopilotChatSuggestions(
+  //   {
+  //     instructions:
+  //       "Check the Asana workspace. Make sure it's the parent workspace. If Asana is connected, first get the workspace projects and ID details, then read them back to me. Then, suggest creating a ticket in Asana with each task as a bullet point. If Typefully is connected, suggest a draft tweet with the Asana tasks an individual Tweet in Typefully.",
+  //     minSuggestions: 1,
+  //     maxSuggestions: 2,
+  //   },
+  //   []
+  // );
   return (
     <TodoProvider>
       <div className="flex h-screen w-screen bg-gray-100">

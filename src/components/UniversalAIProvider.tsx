@@ -300,7 +300,7 @@ export const UniversalAIProvider: React.FC<UniversalAIProviderProps> = ({
         {hubPosition === 'top' && renderHub()}
         
         {/* Main content */}
-        <div className=\"universal-ai-content\">
+        <div className="universal-ai-content">
           {children}
         </div>
         
@@ -309,7 +309,7 @@ export const UniversalAIProvider: React.FC<UniversalAIProviderProps> = ({
         
         {/* Floating hub */}
         {hubPosition === 'floating' && (
-          <div className=\"floating-hub\">
+          <div className="floating-hub">
             {renderHub()}
           </div>
         )}
@@ -365,22 +365,22 @@ const DebugPanel: React.FC<{
   const [isExpanded, setIsExpanded] = useState(false);
   
   return (
-    <div className=\"debug-panel\">
+    <div className="debug-panel">
       <button
-        className=\"debug-toggle\"
+        className="debug-toggle"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         🔍 Debug {isExpanded ? '↓' : '→'}
       </button>
       
       {isExpanded && (
-        <div className=\"debug-content\">
-          <div className=\"debug-section\">
+        <div className="debug-content">
+          <div className="debug-section">
             <h4>Configuration</h4>
             <pre>{JSON.stringify(config, null, 2)}</pre>
           </div>
           
-          <div className=\"debug-section\">
+          <div className="debug-section">
             <h4>Hub State</h4>
             <pre>{JSON.stringify(hubState, null, 2)}</pre>
           </div>
