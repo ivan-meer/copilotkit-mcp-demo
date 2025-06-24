@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.copilotkit.ai)"
+    ],
+    "deny": []
+  }
+}

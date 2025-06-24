@@ -1,127 +1,127 @@
 <div align="center">
 
-# Working Memory
+# Рабочая Память
    
 ![CopilotKit-Banner](https://github.com/user-attachments/assets/8167c845-0381-45d9-ad1c-83f995d48290)
 </div>
 
-Working Memory is an example for the implementation of the MCP server-client integrations to handle and manage your projects and tasks from your project management applications like Linear.
+Рабочая Память - это пример реализации интеграции сервера и клиента MCP для управления вашими проектами и задачами из приложений для управления проектами, таких как Linear.
 
-## Key Features
+## Ключевые Особенности
 
-- **CopilotKit AI Chat Interface:**  
-  Chat with the CopilotKit AI which acts as useful assitant who can able to provide answers to user queries and perform executable actions inside the application.
+- **Чат-интерфейс CopilotKit AI:**  
+  Общайтесь с CopilotKit AI, который выступает в роли полезного ассистента, способного отвечать на запросы пользователей и выполнять действия внутри приложения.
   
-- **Real-Time Interactivity:**  
-  Enjoy a live chat powered by `@copilotkit/react-ui` that orchestrates dynamic state changes and agent responses.
+- **Интерактивность в реальном времени:**  
+  Живой чат на основе `@copilotkit/react-ui`, который управляет динамическими изменениями состояния и ответами агентов.
 
-- **State Management & Agent Coordination:**  
-  Leverages `@copilotkit/react-core` for robust agent state management and smooth integration of travel and research functionalities.
+- **Управление состоянием и координация агентов:**  
+  Использует `@copilotkit/react-core` для надежного управления состоянием агентов и плавной интеграции функций путешествий и исследований.
 
-- **Responsive & Modern UI:**  
-  Designed with Tailwind CSS to ensure your experience is smooth and adaptive across all devices.
+- **Адаптивный и современный UI:**  
+  Разработан с использованием Tailwind CSS для обеспечения плавного и адаптивного взаимодействия на всех устройствах.
 
-## Technology Stack
+## Технологический Стек
 
-- **Framework:** [Next.js](https://nextjs.org)
-- **UI Library:** React, [CopilotKit UI](https://www.npmjs.com/package/@copilotkit/react-ui)
-- **State Management:** [CopilotKit React Core](https://www.npmjs.com/package/@copilotkit/react-core)
+- **Фреймворк:** [Next.js](https://nextjs.org)
+- **UI Библиотека:** React, [CopilotKit UI](https://www.npmjs.com/package/@copilotkit/react-ui)
+- **Управление состоянием:** [CopilotKit React Core](https://www.npmjs.com/package/@copilotkit/react-core)
 
-- **Styling:** Tailwind CSS
-- **Additional Libraries:**
-  - React Query for data fetching
-  - Framer Motion for animations
-  - Radix UI for accessible components
-  - React Flow for flow diagrams
+- **Стилизация:** Tailwind CSS
+- **Дополнительные библиотеки:**
+  - React Query для получения данных
+  - Framer Motion для анимаций
+  - Radix UI для доступных компонентов
+  - React Flow для диаграмм потоков
 
-## Setup Instructions
+## Инструкции по Установке
 
-1. **Prerequisites:**  
-   - [Node.js](https://nodejs.org) (LTS version recommended)
-   - npm, yarn, or pnpm
+1. **Предварительные требования:**  
+   - [Node.js](https://nodejs.org) (рекомендуется LTS версия)
+   - npm, yarn или pnpm
 
-2. **Installation:**  
+2. **Установка:**  
    ```bash
-   # Clone the repository
+   # Клонировать репозиторий
    git clone <repository-url>
    
-   # Install dependencies
+   # Установить зависимости
    npm install
-   # or
+   # или
    yarn install
-   # or
+   # или
    pnpm install
    ```
 
-3. **Environment Setup:**  
-   Create a `.env` file in the root directory with the necessary environment variables.
+3. **Настройка окружения:**  
+   Создайте файл `.env` в корневой директории с необходимыми переменными окружения.
    ```bash
-    OPENAI_API_KEY = YOUR_API_KEY
+    OPENAI_API_KEY = ВАШ_API_КЛЮЧ
    ```
 
-4. **Running the Development Server:**  
+4. **Запуск сервера разработки:**  
    ```bash
    npm run dev
-   # or
+   # или
    yarn dev
-   # or
+   # или
    pnpm dev
    ```
-   Then, open [http://localhost:3000](http://localhost:3000) in your browser.
+   Затем откройте [http://localhost:3000](http://localhost:3000) в вашем браузере.
 
-## Project Structure
+## Структура Проекта
 
 - **/src/app:**  
-  Contains Next.js page components, layouts, and global styles.
+  Содержит компоненты страниц Next.js, макеты и глобальные стили.
 
 - **/src/components:**  
-  Houses reusable components including agent interfaces (Travel, Research, Chat, Map, Sidebar) and UI elements.
+  Включает переиспользуемые компоненты, такие как интерфейсы агентов (Travel, Research, Chat, Map, Sidebar) и UI элементы.
 
 - **/src/providers:**  
-  Wraps the global state providers responsible for managing agent states.
+  Обеспечивает глобальные провайдеры состояния для управления состояниями агентов.
 
 - **/src/lib:**  
-  Contains utility functions and configuration files.
+  Содержит вспомогательные функции и файлы конфигурации.
 
 - **/src/hooks:**  
-  Custom React hooks for shared functionality.
+  Пользовательские React хуки для общей функциональности.
 
 - **/src/contexts:**  
-  React context providers for global state management.
+  Провайдеры контекста React для глобального управления состоянием.
 
-## Development
+## Разработка
 
-- **Linting:**  
+- **Проверка кода:**  
   ```bash
   npm run lint
-  # or
+  # или
   yarn lint
-  # or
+  # или
   pnpm lint
   ```
 
-- **Building for Production:**  
+- **Сборка для продакшена:**  
   ```bash
   npm run build
-  # or
+  # или
   yarn build
-  # or
+  # или
   pnpm build
   ```
 
-## Deployment
+## Деплой
 
-The easiest way to deploy this project is with [Vercel](https://vercel.com). Build and start your application with:
+Самый простой способ развернуть этот проект - использовать [Vercel](https://vercel.com). Соберите и запустите ваше приложение с помощью:
 ```bash
 npm run build
 npm run start
 ```
-Follow Vercel's deployment guide for more details if needed.
+Для получения дополнительной информации следуйте руководству по развертыванию Vercel.
 
-## Contributing
+## Вклад в Проект
 
-Contributions are welcome! Fork the repository and submit a pull request with any improvements, bug fixes, or new features.
+Мы приветствуем вклад в проект! Форкните репозиторий и отправьте pull request с любыми улучшениями, исправлениями ошибок или новыми функциями.
 
-## License
+## Лицензия
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Распространяется под лицензией MIT. Подробнее см. в файле `LICENSE`.

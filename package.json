@@ -4,9 +4,35 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:smart": "node scripts/dev.js",
+    "dev:safe": "npm run port:check && npm run dev:smart",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "start:prod": "npm run build && npm run start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "health": "node scripts/health-check.js",
+    "health:watch": "watch 'npm run health' --interval=30",
+    "port:check": "node scripts/port-manager.js status",
+    "port:free": "node scripts/port-manager.js free 3000 --force",
+    "port:find": "node scripts/port-manager.js find",
+    "restart": "npm run port:free && npm run dev:smart",
+    "restart:clean": "npm run clean && npm run restart",
+    "logs:dev": "npm run dev:smart 2>&1 | tee logs/dev-$(date +%Y%m%d-%H%M%S).log",
+    "logs:clear": "rm -rf logs/*.log",
+    "clean": "rm -rf .next out dist logs/*.log",
+    "deps:check": "npm outdated",
+    "deps:update": "npm update",
+    "deps:audit": "npm audit",
+    "deps:audit:fix": "npm audit fix",
+    "setup": "npm install && npm run type-check && npm run health",
+    "precommit": "npm run lint:fix && npm run type-check && npm run health",
+    "debug": "NODE_OPTIONS='--inspect' npm run dev",
+    "analyze": "cross-env ANALYZE=true npm run build",
+    "test:e2e": "echo 'E2E tests not configured yet'",
+    "docker:build": "docker build -t universal-ai-chat-hub .",
+    "docker:run": "docker run -p 3000:3000 universal-ai-chat-hub"
   },
   "dependencies": {
     "@copilotkit/react-core": "1.8.9",
@@ -39,7 +65,9 @@
     "react-markdown": "^9.0.3",
     "reactflow": "^11.11.4",
     "tailwind-merge": "^3.0.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.4",
+    "react-hook-form": "^7.48.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -51,6 +79,10 @@
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "cross-env": "^7.0.3",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2",
+    "watch": "^1.0.2"
   }
 }
