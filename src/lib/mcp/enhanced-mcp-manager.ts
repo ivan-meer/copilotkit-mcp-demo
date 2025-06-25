@@ -18,24 +18,128 @@
  * @since 2025-01-24
  */
 
-import EventEmitter from 'events';
-import {
-  EnhancedMCPServerConfig,
-  MCPServerState,
-  MCPServerStatus,
-  MCPTransportType,
-  EnhancedMCPTool,
-  EnhancedMCPResource,
-  EnhancedMCPPrompt,
-  ToolExecutionContext,
-  MCPNotification,
-  MCPServerDiscovery,
-  MCPError,
-  MCPConnectionError,
-  MCPToolExecutionError,
-  MCPValidationError,
-  EnhancedMCPServerConfigSchema,
-} from './enhanced-types';
+import { EventEmitter } from 'events';
+import { spawn, ChildProcess } from 'child_process';
+
+// Временные типы для демонстрации
+interface EnhancedMCPServerConfig {
+  id: string;
+  name: string;
+  transport: 'stdio' | 'sse' | 'websocket' | 'http';
+  connection: {
+    command?: string;
+    args?: string[];
+    env?: Record<string, string>;
+    url?: string;
+    headers?: Record<string, string>;
+  };
+  enabled: boolean;
+  autoReconnect: boolean;
+  healthCheck: {
+    enabled: boolean;
+    interval: number;
+    timeout: number;
+  };
+  capabilities?: {
+    tools?: boolean;
+    resources?: boolean;
+    prompts?: boolean;
+    logging?: boolean;
+  };
+}
+
+enum MCPServerStatus {
+  DISCONNECTED = 'disconnected',
+  CONNECTING = 'connecting',
+  CONNECTED = 'connected',
+  ERROR = 'error',
+  RECONNECTING = 'reconnecting'
+}
+
+enum MCPTransportType {
+  STDIO = 'stdio',
+  SSE = 'sse',
+  WEBSOCKET = 'websocket',
+  HTTP = 'http'
+}
+
+interface MCPServerState {
+  config: EnhancedMCPServerConfig;
+  status: MCPServerStatus;
+  connectionInfo: {
+    connectedAt?: Date;
+    lastActivity?: Date;
+    lastError?: string;
+    reconnectCount: number;
+  };
+  discoveredCapabilities: {
+    tools: any[];
+    resources: any[];
+    prompts: any[];
+    notifications: any[];
+  };
+  metrics: {
+    totalRequests: number;
+    successfulRequests: number;
+    failedRequests: number;
+    averageResponseTime: number;
+    requestsInLastMinute: number;
+    requestsInLastHour: number;
+    lastRequestTime?: Date;
+  };
+  errors: Array<{
+    timestamp: Date;
+    error: string;
+    context?: string;
+    resolved: boolean;
+  }>;
+}
+
+interface ToolExecutionContext {
+  id: string;
+  toolName: string;
+  serverId: string;
+  parameters: Record<string, any>;
+  status: 'pending' | 'executing' | 'completed' | 'failed' | 'cancelled';
+  startTime: Date;
+  endTime?: Date;
+  result?: any;
+  error?: string;
+  metadata?: any;
+  progress?: {
+    current: number;
+    total: number;
+    message: string;
+  };
+}
+
+class MCPError extends Error {
+  constructor(message: string, public serverId?: string) {
+    super(message);
+    this.name = 'MCPError';
+  }
+}
+
+class MCPConnectionError extends MCPError {
+  constructor(serverId: string, message: string) {
+    super(message, serverId);
+    this.name = 'MCPConnectionError';
+  }
+}
+
+class MCPToolExecutionError extends MCPError {
+  constructor(serverId: string, public toolName: string, message: string) {
+    super(message, serverId);
+    this.name = 'MCPToolExecutionError';
+  }
+}
+
+class MCPValidationError extends MCPError {
+  constructor(serverId: string, message: string) {
+    super(message, serverId);
+    this.name = 'MCPValidationError';
+  }
+}
 
 /**
  * MCP Transport interface for different connection types
@@ -94,12 +198,11 @@ export class EnhancedMCPManager extends EventEmitter {
    * Add and initialize a new MCP server
    */
   async addServer(config: EnhancedMCPServerConfig): Promise<void> {
-    // Validate configuration
-    const validationResult = EnhancedMCPServerConfigSchema.safeParse(config);
-    if (!validationResult.success) {
+    // Basic validation
+    if (!config.id || !config.name || !config.transport) {
       throw new MCPValidationError(
-        config.id,
-        `Invalid server configuration: ${validationResult.error.message}`
+        config.id || 'unknown',
+        'Invalid server configuration: missing required fields'
       );
     }
     
@@ -774,24 +877,307 @@ export class EnhancedMCPManager extends EventEmitter {
   }
 }
 
-// Placeholder transport implementations
-// TODO: Implement proper transport classes
+// Full transport implementations
 class StdioTransport implements MCPTransport {
+  private process?: ChildProcess;
+  private isConnectedState = false;
+  private requestCounter = 0;
+  private pendingRequests = new Map<number, { resolve: Function; reject: Function; timeout: NodeJS.Timeout }>();
+  private buffer = '';
+
   constructor(private config: EnhancedMCPServerConfig) {}
-  async connect(): Promise<void> { throw new Error('StdioTransport not implemented'); }
-  async disconnect(): Promise<void> { throw new Error('StdioTransport not implemented'); }
-  async send(message: any): Promise<any> { throw new Error('StdioTransport not implemented'); }
-  isConnected(): boolean { return false; }
-  getStatus(): MCPServerStatus { return MCPServerStatus.DISCONNECTED; }
+
+  async connect(): Promise<void> {
+    if (this.isConnectedState) return;
+
+    const { command, args = [], env = {} } = this.config.connection;
+    if (!command) {
+      throw new Error('Command is required for stdio transport');
+    }
+
+    // Spawn process
+    this.process = spawn(command, args, {
+      stdio: ['pipe', 'pipe', 'pipe'],
+      env: { ...process.env, ...env },
+      shell: true
+    });
+
+    if (!this.process.stdin || !this.process.stdout || !this.process.stderr) {
+      throw new Error('Failed to establish stdio streams');
+    }
+
+    // Setup event handlers
+    this.process.on('error', (error) => {
+      this.isConnectedState = false;
+      this.rejectAllPending(error);
+    });
+
+    this.process.on('exit', (code, signal) => {
+      this.isConnectedState = false;
+      this.rejectAllPending(new Error(`Process exited with code ${code}, signal ${signal}`));
+    });
+
+    // Setup stdout handler for responses
+    this.process.stdout.on('data', (data) => {
+      this.buffer += data.toString();
+      this.processBuffer();
+    });
+
+    // Setup stderr handler for logging
+    this.process.stderr.on('data', (data) => {
+      console.warn(`MCP Server ${this.config.id} stderr:`, data.toString());
+    });
+
+    // Perform handshake
+    await this.performHandshake();
+    this.isConnectedState = true;
+  }
+
+  async disconnect(): Promise<void> {
+    if (!this.isConnectedState || !this.process) return;
+
+    this.isConnectedState = false;
+    
+    // Reject all pending requests
+    this.rejectAllPending(new Error('Connection closed'));
+
+    // Kill process
+    this.process.kill('SIGTERM');
+    
+    // Give it time to gracefully exit
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    if (!this.process.killed) {
+      this.process.kill('SIGKILL');
+    }
+
+    this.process = undefined;
+  }
+
+  async send(message: any): Promise<any> {
+    if (!this.isConnectedState || !this.process || !this.process.stdin) {
+      throw new Error('Not connected');
+    }
+
+    const requestId = ++this.requestCounter;
+    const request = {
+      jsonrpc: '2.0',
+      id: requestId,
+      ...message
+    };
+
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        this.pendingRequests.delete(requestId);
+        reject(new Error('Request timeout'));
+      }, 30000);
+
+      this.pendingRequests.set(requestId, { resolve, reject, timeout });
+
+      try {
+        const jsonMessage = JSON.stringify(request) + '\n';
+        this.process!.stdin!.write(jsonMessage);
+      } catch (error) {
+        this.pendingRequests.delete(requestId);
+        clearTimeout(timeout);
+        reject(error);
+      }
+    });
+  }
+
+  isConnected(): boolean {
+    return this.isConnectedState;
+  }
+
+  getStatus(): MCPServerStatus {
+    return this.isConnectedState ? MCPServerStatus.CONNECTED : MCPServerStatus.DISCONNECTED;
+  }
+
+  private async performHandshake(): Promise<void> {
+    const initRequest = {
+      method: 'initialize',
+      params: {
+        protocolVersion: '2024-11-05',
+        capabilities: {
+          tools: {},
+          resources: {},
+          prompts: {},
+          logging: {}
+        },
+        clientInfo: {
+          name: 'Universal AI Chat Hub',
+          version: '1.0.0'
+        }
+      }
+    };
+
+    try {
+      await this.send(initRequest);
+    } catch (error) {
+      throw new Error(`Handshake failed: ${error.message}`);
+    }
+  }
+
+  private processBuffer(): void {
+    const lines = this.buffer.split('\n');
+    this.buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      if (line.trim()) {
+        try {
+          const message = JSON.parse(line);
+          this.handleMessage(message);
+        } catch (error) {
+          console.error('Failed to parse JSON-RPC message:', error, line);
+        }
+      }
+    }
+  }
+
+  private handleMessage(message: any): void {
+    if (message.id && this.pendingRequests.has(message.id)) {
+      const pending = this.pendingRequests.get(message.id)!;
+      clearTimeout(pending.timeout);
+      this.pendingRequests.delete(message.id);
+
+      if (message.error) {
+        pending.reject(new Error(message.error.message || 'Request failed'));
+      } else {
+        pending.resolve(message.result);
+      }
+    } else if (message.method) {
+      // Handle notifications and requests from server
+      console.log(`Received notification from ${this.config.id}:`, message);
+    }
+  }
+
+  private rejectAllPending(error: Error): void {
+    for (const pending of this.pendingRequests.values()) {
+      clearTimeout(pending.timeout);
+      pending.reject(error);
+    }
+    this.pendingRequests.clear();
+  }
 }
 
 class SSETransport implements MCPTransport {
+  private eventSource?: EventSource;
+  private isConnectedState = false;
+  private requestCounter = 0;
+  private pendingRequests = new Map<number, { resolve: Function; reject: Function; timeout: NodeJS.Timeout }>();
+
   constructor(private config: EnhancedMCPServerConfig) {}
-  async connect(): Promise<void> { throw new Error('SSETransport not implemented'); }
-  async disconnect(): Promise<void> { throw new Error('SSETransport not implemented'); }
-  async send(message: any): Promise<any> { throw new Error('SSETransport not implemented'); }
-  isConnected(): boolean { return false; }
-  getStatus(): MCPServerStatus { return MCPServerStatus.DISCONNECTED; }
+
+  async connect(): Promise<void> {
+    if (this.isConnectedState) return;
+
+    const { url, headers = {} } = this.config.connection;
+    if (!url) {
+      throw new Error('URL is required for SSE transport');
+    }
+
+    return new Promise((resolve, reject) => {
+      this.eventSource = new EventSource(url);
+
+      this.eventSource.onopen = () => {
+        this.isConnectedState = true;
+        resolve();
+      };
+
+      this.eventSource.onerror = (error) => {
+        this.isConnectedState = false;
+        this.rejectAllPending(new Error('SSE connection failed'));
+        reject(new Error('SSE connection failed'));
+      };
+
+      this.eventSource.onmessage = (event) => {
+        try {
+          const message = JSON.parse(event.data);
+          this.handleMessage(message);
+        } catch (error) {
+          console.error('Failed to parse SSE message:', error);
+        }
+      };
+    });
+  }
+
+  async disconnect(): Promise<void> {
+    if (!this.isConnectedState || !this.eventSource) return;
+
+    this.isConnectedState = false;
+    this.rejectAllPending(new Error('Connection closed'));
+    this.eventSource.close();
+    this.eventSource = undefined;
+  }
+
+  async send(message: any): Promise<any> {
+    if (!this.isConnectedState) {
+      throw new Error('Not connected');
+    }
+
+    const requestId = ++this.requestCounter;
+    const request = {
+      jsonrpc: '2.0',
+      id: requestId,
+      ...message
+    };
+
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        this.pendingRequests.delete(requestId);
+        reject(new Error('Request timeout'));
+      }, 30000);
+
+      this.pendingRequests.set(requestId, { resolve, reject, timeout });
+
+      // For SSE, we need to send via HTTP POST to a separate endpoint
+      const { url } = this.config.connection;
+      const sendUrl = url!.replace('/events', '/send').replace('/sse', '/send');
+
+      fetch(sendUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...this.config.connection.headers
+        },
+        body: JSON.stringify(request)
+      }).catch(error => {
+        this.pendingRequests.delete(requestId);
+        clearTimeout(timeout);
+        reject(error);
+      });
+    });
+  }
+
+  isConnected(): boolean {
+    return this.isConnectedState;
+  }
+
+  getStatus(): MCPServerStatus {
+    return this.isConnectedState ? MCPServerStatus.CONNECTED : MCPServerStatus.DISCONNECTED;
+  }
+
+  private handleMessage(message: any): void {
+    if (message.id && this.pendingRequests.has(message.id)) {
+      const pending = this.pendingRequests.get(message.id)!;
+      clearTimeout(pending.timeout);
+      this.pendingRequests.delete(message.id);
+
+      if (message.error) {
+        pending.reject(new Error(message.error.message || 'Request failed'));
+      } else {
+        pending.resolve(message.result);
+      }
+    }
+  }
+
+  private rejectAllPending(error: Error): void {
+    for (const pending of this.pendingRequests.values()) {
+      clearTimeout(pending.timeout);
+      pending.reject(error);
+    }
+    this.pendingRequests.clear();
+  }
 }
 
 class WebSocketTransport implements MCPTransport {

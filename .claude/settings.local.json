@@ -6,7 +6,9 @@
       "Bash(chmod:*)",
       "Bash(node:*)",
       "Bash(npm install:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(npm run dev:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
